@@ -1,15 +1,35 @@
 import { View, Text, TextInput, StyleSheet } from "react-native"
 import BottonComponent from "../../components/BottonComponent"
 import react, { useState } from "react";
+import { registerUser } from "../../Src/Service/AuthService";
 
-export default function RegistroScreen({navigation}){
+export default function RegistroScreen({ navigation }) {
     const [nombre, setNombre] = useState("");
-    const [email, setEmail] = useState(""); 
+    const [email, setEmail] = useState("");
     const [telefono, setTelefono] = useState("");
     const [password, setPassword] = useState("");
     const [confirmarPassword, setConfirmarPassword] = useState("");
+    const [loading, setLoading] = useState(false);
 
-    return(
+
+    const handleRegister = async () => {
+        // setLoading(true);
+        try {
+            const result = await registerUser(nombre, email, password);
+            if (result.success) {
+               navigation.navigate("Login") 
+            }
+        } catch (error) {
+            Alert.alert("Error", "Ocurrió un error inesperado", [
+                { text: "OK", onPress: () => console.log(error) },
+            ]);
+        } finally {
+            setLoading(false);
+        }
+
+    }
+
+    return (
         <View style={styles.container}>
             <Text style={styles.title}>Registro</Text>
             <TextInput
@@ -17,6 +37,7 @@ export default function RegistroScreen({navigation}){
                 placeholder="Nombre Completo"
                 value={nombre}
                 onChangeText={setNombre}
+                editable={!loading}
             />
             <TextInput
                 style={styles.input}
@@ -25,6 +46,7 @@ export default function RegistroScreen({navigation}){
                 onChangeText={setEmail}
                 keyboardType="email-address"
                 autoCapitalize="none"
+                editable={!loading}
             />
             <TextInput
                 style={styles.input}
@@ -32,6 +54,7 @@ export default function RegistroScreen({navigation}){
                 value={telefono}
                 onChangeText={setTelefono}
                 keyboardType="phone-pad"
+                editable={!loading}
             />
             <TextInput
                 style={styles.input}
@@ -39,6 +62,7 @@ export default function RegistroScreen({navigation}){
                 secureTextEntry
                 value={password}
                 onChangeText={setPassword}
+                disabled={loading}
             />
             <TextInput
                 style={styles.input}
@@ -46,18 +70,18 @@ export default function RegistroScreen({navigation}){
                 secureTextEntry
                 value={confirmarPassword}
                 onChangeText={setConfirmarPassword}
+                disabled={loading}
             />
             <BottonComponent
                 title="Registrarse"
-                onPress={() => console.log("Registro")}
+                onPress={handleRegister}
             />
             <BottonComponent
                 title="Iniciar Sesión"
                 onPress={() => navigation.navigate("Login")}
             />
         </View>
-    )
-
+    );
 }
 
 

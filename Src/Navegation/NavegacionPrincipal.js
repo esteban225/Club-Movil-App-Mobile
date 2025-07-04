@@ -1,14 +1,11 @@
-import AsociadoStack from "./stacks/AsociadoStack";
-import ActividadStack from "./stacks/ActividadStack";
-import PagoStack from "./stacks/PagoStack";
-import ParticipanteStack from "./stacks/ParticipanteStack";
-import PrestamoStack from "./stacks/PrestamoStack";
+import InicioStack from "./stacks/InicioStack";
+import PerfirStack from "./stacks/PerfirStack";
+import ConfiguracionStack from "./stacks/ConfiguracionStack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Ionicons } from "@expo/vector-icons";
-import Feather from '@expo/vector-icons/Feather';
-import Entypo from '@expo/vector-icons/Entypo';
-import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import { StyleSheet } from "react-native";
+import PantallaPerfil from "../../Screen/main/PantallaPerfil";
+
 
 
 
@@ -23,34 +20,23 @@ export default function NavegacionPrincipal() {
             tabBarActiveTintColor: {backgroundColor: "#fff"}, // Fondo de la barra
           }}
         >
-            <Tab.Screen name="Asociados" component={AsociadoStack} options={{
+            <Tab.Screen name="Inicio" component={InicioStack} options={{
                 tabBarIcon: ({ color, size }) => (
                     <Ionicons name="home" size={size} color={color} />
                 ),
             }}/>
 
-            <Tab.Screen name="Actividades" component={ActividadStack} options={{
+            <Tab.Screen name="Perfil" component={PantallaPerfil} options={{
                 tabBarIcon: ({ color, size }) => (
-                    <Feather name="activity" size={24} color="black" />
+                    <Ionicons name="person-outline" size={size} color={color} />
                 )
             }}/>
 
-            <Tab.Screen name="Pagos" component={PagoStack} options={{
+            <Tab.Screen name="Configuración" component={ConfiguracionStack} options={{
                 tabBarIcon: ({ color, size }) =>
-                    <Entypo name="paypal" size={24} color="black" />
-
+                    <Ionicons name="settings-outline" size={size} color={color}  />
             }}/>
 
-            <Tab.Screen name="Participantes" component={ParticipanteStack} options={{
-                tabBarIcon: ({ color, size }) =>
-                    <FontAwesome6 name="people-group" size={24} color="black" />
-
-            }}/>
-
-            <Tab.Screen name="Prestamos" component={PrestamoStack} options={{
-                tabBarIcon: ({ color, size }) =>
-                    <MaterialCommunityIcons name="account-cash-outline" size={24} color="black" />
-            }}/>
         </Tab.Navigator>
     );
 }

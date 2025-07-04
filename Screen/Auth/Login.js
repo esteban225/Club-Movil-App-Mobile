@@ -1,10 +1,38 @@
-import { View, Text, TextInput, StyleSheet } from "react-native";
+import { View, Text, TextInput, StyleSheet, Alert } from "react-native";
 import BottonComponent from "../../components/BottonComponent";
 import { useState } from "react";
+// Asegúrate de importar loginUser si no lo has hecho
+import { loginUser } from "../../Src/Service/AuthService";
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleLogin = async () => {
+    // setLoading(true);
+
+    try {
+      const result = await loginUser(email, password);
+
+      if (result.success) {
+        Alert.alert("Éxito", "Inicio de sesión exitoso", [
+          {
+            text: "OK",
+            onPress: () =>
+              console.log("Login exitoso, redirigiendo automaticamente ...."),
+          },
+        ]);
+      } 
+      
+    } catch (error) {
+      Alert.alert("Error", "Ocurrió un error inesperado", [
+        { text: "OK", onPress: () => console.log(error) },
+      ]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -23,15 +51,19 @@ export default function LoginScreen({ navigation }) {
         secureTextEntry
         value={password}
         onChangeText={setPassword}
+        editable={!loading}
       />
       <BottonComponent
-        title="Iniciar Sesión"
-        onPress={() => console.log("Login")}
+        title="Ingresar"
+        onPress={handleLogin}
+        disabled={loading}
       />
       <BottonComponent
-        title="Registrarse"
+        title="¿No tienes cuenta? Regístrate"
         onPress={() => navigation.navigate("Registro")}
+        style={{ backgroundColor: "#4CAF50" }}
       />
+
     </View>
   );
 }
@@ -43,14 +75,12 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: "#f5f5f5",
   },
-
   title: {
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 24,
     textAlign: "center",
   },
-
   input: {
     height: 50,
     borderColor: "#ccc",
@@ -60,3 +90,4 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
 });
+
